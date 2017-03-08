@@ -54,7 +54,14 @@ namespace ProductManager.Controllers
         }
 
 
+        public IHttpActionResult Put(Product produto)
+        {
+            var prod = products.FirstOrDefault<Product>(x => x.Id == produto.Id);
 
+            var index = products.FindIndex(c => c.Id== produto.Id);
+            products[index] = new Product { Id = produto.Id, Category = produto.Category, Name = produto.Name, Price = produto.Price };
+            return Ok();
+        }
 
 
     }
