@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Web.Http;
 
 namespace ProductManager.Controllers
@@ -28,6 +30,29 @@ namespace ProductManager.Controllers
             return Ok(products.FirstOrDefault<Product>(x => x.Id == id));
         }
 
+        public IHttpActionResult Post(Product produto)
+        {
+            if (produto != null)
+            {
+                products.Add(produto);
+                return Ok(produto);
+            }
+            return InternalServerError();
+        }
+
+        public HttpResponseMessage Post(Product produto)
+        {
+            if (produto != null)
+            {
+                products.Add(produto);
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new StringContent("Produto inserido.", Encoding.Unicode);
+                return response;
+            }
+            HttpResponseMessage responseError = Request.CreateResponse(HttpStatusCode.BadRequest);
+            responseError.Content = new StringContent("Produto NAO inserido.", Encoding.Unicode);
+            return responseError;
+        }
 
 
     }
