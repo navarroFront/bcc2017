@@ -63,6 +63,22 @@ namespace ProductManager.Controllers
             return Ok();
         }
 
+        public HttpResponseMessage Delete(int id)
+        {
+            var prod = products.FirstOrDefault<Product>(x => x.Id == id);
+            HttpResponseMessage responseError;
+            if (prod != null)
+            {
+                products.Remove(prod);
+                responseError = Request.CreateResponse(HttpStatusCode.OK);
+                responseError.Content = new StringContent("Produto removido com Sucesso.");
+                return responseError;
+            }
+            responseError = Request.CreateResponse(HttpStatusCode.InternalServerError);
+            responseError.Content = new StringContent("Produto não removido. Tente novamente");
+            return responseError;
+        }
+
 
     }
 }
